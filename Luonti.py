@@ -15,15 +15,25 @@ from influxdb_client import InfluxDBClient, Point, WriteOptions
 from influxdb_client import InfluxDBClient, Point, WritePrecision
 from influxdb_client.client.write_api import SYNCHRONOUS
 import asyncio
+#import LueParametrit
 
-opcua_url = "opc.tcp://10.10.10.1:4840"
+
 DataKpl = []
 ParametritKpl = []
 NapitKpl = []
 Paikka = []
 Nimet = []
-Nodet = []
+Erppi = []
+Tagit = []
+Sarjanumero = []
+Hys = []
+intervalli = []
+Maa = []
+KoneenTyyppi = []
+TestiInfo = []
+ProjektiNumero = []
 
+Nodet = []
 Nodet.append("fbAnaIn_Grease PR311 L2")
 Nodet.append("fbAnaIn_Pressing nip PR311")
 Nodet.append("fbDirectDrive_Hyd_Motor")
@@ -75,6 +85,19 @@ try:
         nNumberOfButtons = client.get_node(f'ns=3;s="{Mittauspaikka}"."stHMI"."stBaseData"."nNumberOfButtons"').get_value()
         nNumberOfParameters = client.get_node(f'ns=3;s="{Mittauspaikka}"."stHMI"."stBaseData"."nNumberOfParameters"').get_value()
         bLogByIntervalWhenTRUE = client.get_node(f'ns=3;s="{Mittauspaikka}"."stHMI"."stBaseData"."bLogByIntervalWhenTRUE"').get_value()
+
+        sCountry = client.get_node(f'ns=3;s="dbCommonData"."stHMI"."stProjectData"."sCountry"').get_value()
+        sMachineType = client.get_node(f'ns=3;s="dbCommonData"."stHMI"."stProjectData"."sMachineType"').get_value()
+        sTestingInfo = client.get_node(f'ns=3;s="dbCommonData"."stHMI"."stProjectData"."sTestingInfo"').get_value()
+        dProjectNumber = client.get_node(f'ns=3;s="dbCommonData"."stHMI"."stProjectData"."dProjectNumber"').get_value()
+
+
+
+
+        """sMachineType = client.get_node(f'ns=3;s="{Mittauspaikka}"."stHMI"."stProjectData"."sMachineType"').get_value()
+        sTestingInfo = client.get_node(f'ns=3;s="{Mittauspaikka}"."stHMI"."stProjectData"."sTestingInfo"').get_value()
+        dProjecNumber = client.get_node(f'ns=3;s="{Mittauspaikka}"."stHMI"."stProjectData"."dProjecNumber"').get_value()"""
+
     ############################      Käydään läpi kaikki mittauspaikat ja haetaan niiden tiedot     ############################
         
 
@@ -86,6 +109,21 @@ try:
         if Mittauspaikka == None:
             Mittauspaikka = "Arvoa ei saatu luettua"
         
+        if sERP_Code == None:
+            sERP_Code = "Ei ERP koodia"
+
+        if sName == None:
+            sName = "Ei nimeä"
+
+        if sTag == None:
+            sTag = "Ei tagia"
+
+        if dMachineSerialNumber == None:
+            dMachineSerialNumber = "Ei sarjanumeroa"
+
+        if dLogIntervalHysteresis == None:
+            dLogIntervalHysteresis = "Ei hystereesi arvoa"
+
         if nNumberOfValues == None:
             nNumberOfValues = 0
 
@@ -94,9 +132,23 @@ try:
 
         if nNumberOfParameters == None:
             nNumberOfParameters = 0
+        
+        if bLogByIntervalWhenTRUE == None:
+            bLogByIntervalWhenTRUE = "Ei arvoa"
 
-        if sName == None:
-            sName = "Arvoa ei saatu luettua"
+        if sCountry == None:
+            sCountry = "Ei maata"
+
+        if sMachineType == None:
+            sMachineType = "Ei konetyyppiä"
+
+        if sTestingInfo == None:
+            sTestingInfo = "Ei testitietoa"
+        
+        if dProjectNumber == None:
+            dProjectNumber = 0
+
+
         #################################     Tarkistetaan, että kaikki arvot on olemassa     #################################
 
 
@@ -111,6 +163,18 @@ try:
         DataKpl.append(nNumberOfValues)
         NapitKpl.append(nNumberOfButtons)
         ParametritKpl.append(nNumberOfParameters)
+        Erppi.append(sERP_Code)
+        Tagit.append(sTag)
+        Sarjanumero.append(dMachineSerialNumber)
+        Hys.append(dLogIntervalHysteresis)
+        intervalli.append(bLogByIntervalWhenTRUE)
+        Maa.append(sCountry)
+        KoneenTyyppi.append(sMachineType)
+        TestiInfo.append(sTestingInfo)
+        ProjektiNumero.append(dProjectNumber)
+
+
+
         #################################     Lisätään arvot listoihin                        #################################
 
 except Exception as e:
@@ -128,9 +192,24 @@ finally:
 
 
 for i in range(len(Paikka)):       
-    print(f"{Paikka[i]}")
-    print(f"{Nimet[i]}")
-    print(f"{DataKpl[i]}")
-    print(f"{NapitKpl[i]}")
-    print(f"{ParametritKpl[i]}")
+    print(f"Paikka {Paikka[i]}")
+    print(f"Nimi {Nimet[i]}")
+    print(f"DataKpl {DataKpl[i]}")
+    print(f"NapitKpl {NapitKpl[i]}")
+    print(f"ParametritKpl {ParametritKpl[i]}")
+    print(f"ERP {Erppi[i]}")
+    print(f"Tag {Tagit[i]}")
+    print(f"Sarjanumero {Sarjanumero[i]}")
+    print(f"Hysteresis {Hys[i]}")
+    print(f"Intervalli {intervalli[i]}")
+    print(f"Maa {Maa[i]}")
+    print(f"Koneen tyyppi {KoneenTyyppi[i]}")
+    print(f"Testi info {TestiInfo[i]}")
+    print(f"Projekti numero {ProjektiNumero[i]}")
+
+
+
     print("\n" * 3)
+    
+    
+    
