@@ -15,9 +15,12 @@ from influxdb_client import InfluxDBClient, Point, WriteOptions
 from influxdb_client import InfluxDBClient, Point, WritePrecision
 from influxdb_client.client.write_api import SYNCHRONOUS
 import asyncio
+import json
 #import LueParametrit
 
-
+DataNodet = []
+ButtonNodet = []
+ParmetriNodet = []
 DataKpl = []
 ParametritKpl = []
 NapitKpl = []
@@ -32,7 +35,7 @@ Maa = []
 KoneenTyyppi = []
 TestiInfo = []
 ProjektiNumero = []
-
+###### Tässä ei ole kaikki, lisää puuttuvat ######
 Nodet = []
 Nodet.append("fbAnaIn_Grease PR311 L2")
 Nodet.append("fbAnaIn_Pressing nip PR311")
@@ -185,13 +188,35 @@ finally:
     print("Client disconnected")
 
 
+for i in range(len(Paikka)):
+    
+    #Jos nodella on dataa niin tehdään siihen valmiit nodet
+    for j in range(DataKpl[i]):
+        DataNodet.append(f'ns=3;s="{Paikka[i]}"."stHMI"."stData"[{i}]."eValueType"|ns=3;s="{Paikka[i]}"."stHMI"."stData"[{i}]."fValue"|{Paikka[i]}|{Nimet[i]}|{Erppi[i]}|{Tagit[i]}|{Sarjanumero[i]}|{Hys[i]}|{intervalli[i]}|{Maa[i]}|{KoneenTyyppi[i]}|{TestiInfo[i]}|{ProjektiNumero[i]}')
+    
+    for j in range(NapitKpl[i]):
+        ButtonNodet.append(f'ns=3;s="{Paikka[i]}"."stHMI"."stButtons"[{i}]."sName"|ns=3;s="{Paikka[i]}"."stHMI"."stButtons"[{i}]."bStateMemory"|{Paikka[i]}|{Nimet[i]}|{Erppi[i]}|{Tagit[i]}|{Sarjanumero[i]}|{Hys[i]}|{intervalli[i]}|{Maa[i]}|{KoneenTyyppi[i]}|{TestiInfo[i]}|{ProjektiNumero[i]}')
+        
+
+    for j in range(ParametritKpl[i]):
+        ParmetriNodet.append(f'ns=3;s="{Paikka[i]}"."stHMI"."stParameters"[{i}]."sName"|ns=3;s="{Paikka[i]}"."stHMI"."stParameters"[{i}]."fValue"|{Paikka[i]}|{Nimet[i]}|{Erppi[i]}|{Tagit[i]}|{Sarjanumero[i]}|{Hys[i]}|{intervalli[i]}|{Maa[i]}|{KoneenTyyppi[i]}|{TestiInfo[i]}|{ProjektiNumero[i]}')
+    
 
 
 
 
 
 
-for i in range(len(Paikka)):       
+
+
+
+
+for i in range(len(DataNodet)):
+    print(f'Datanode {DataNodet[i]}')
+    print(f'ButtonNode {ButtonNodet[i]}')
+    
+
+"""for i in range(len(Paikka)):       
     print(f"Paikka {Paikka[i]}")
     print(f"Nimi {Nimet[i]}")
     print(f"DataKpl {DataKpl[i]}")
@@ -206,10 +231,19 @@ for i in range(len(Paikka)):
     print(f"Koneen tyyppi {KoneenTyyppi[i]}")
     print(f"Testi info {TestiInfo[i]}")
     print(f"Projekti numero {ProjektiNumero[i]}")
+    print("\n" * 3)"""
+    
+
+data = {
+    "DataNodet": DataNodet,
+    "ButtonNodet": ButtonNodet,
+    "ParmetriNodet": ParmetriNodet
+}
+
+# Tallenna tiedot JSON-tiedostoon
+with open('Nodet.json', 'w') as f:
+    json.dump(data, f, indent=4)
+    
 
 
 
-    print("\n" * 3)
-    
-    
-    
