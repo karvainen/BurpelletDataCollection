@@ -1,66 +1,107 @@
-import asyncio
-from asyncua import Client, Node, ua
-from influxdb_client import InfluxDBClient, Point, WritePrecision
-from influxdb_client.client.write_api import SYNCHRONOUS
 import json
+from opcua import Client, ua
 
-# Ladataan JSON-tiedosto
-with open('Nodet.json', 'r') as file:
+def lue_opc_ua_node(client, node_id):
+    try:
+        node = client.get_node(node_id)
+        value = node.get_value()
+        return value
+    except ua.UaStatusCodeError as e:
+        print(f"Error reading node {node_id}: {e}")
+        return None
+
+device_type_dict = {
+    0: "Not valid",
+    1: "Speed_n1_rpm",
+    2: "Speed_%",
+    3: "Speed_n2_rpm",
+    4: "Current",
+    5: "Torque_%_nom",
+    6: "Torque_n2_Nm",
+    7: "Power",
+    8: "Voltage",
+    10: "Temperature",
+    11: "Position",
+    12: "Pressure",
+    13: "Flow",
+    14: "Moisture",
+    20: "Volume",
+    21: "Weight",
+    30: "Digital In",
+    31: "Digital Out",
+    32: "Button",
+    33: "Warning",
+    34: "Fault",
+    35: "DCS Digital Input",
+    36: "DCS Digital Output",
+    37: "Counter",
+    40: "Parameter"
+}
+
+def HaeTyyppi(enum_value):
+    return device_type_dict.get(enum_value, "Unknown enum value")
+
+# Lataa JSON-tiedosto
+with open('Nodet.json', 'r', encoding='utf-8') as file:
     data = json.load(file)
 
+# Alusta listat
+Nimet = []
+Arvot = []
+Osa = []
+Node = []
+ErpNo = []
+Tagit = []
+Sarjanumero = []
+Hys = []
+Intervalli = []
+Maa = []
+KoneenTyyppi = []
+TestiInfo = []
+Projektinumero = []
 
-# InfluxDB yhteystiedot
-token = "E9pLhUMQQqpfNJQuHx8scPF7tjLaIGUbQHvIigrq92OBJ7AGjRVT6hy4NqN9UVcfWTfI1G0CjDlz_kddJ4E52w=="
-org = "Burpellet"
-bucket = "NewDataCollection"
-url = "http://10.10.10.10:8086"  # Korvaa oikealla URL-osoitteella
+# Käy läpi tiedot ja jaa listat
+for item in data['DataNodet']:
+    parts = item.split('|')
+    Nimet.append(parts[0])
+    Arvot.append(parts[1])
+    Osa.append(parts[2])
+    Node.append(parts[3])
+    ErpNo.append(parts[4])
+    Tagit.append(parts[5])
+    Sarjanumero.append(parts[6])
+    Hys.append(parts[7])
+    Intervalli.append(parts[8])
+    Maa.append(parts[9])
+    KoneenTyyppi.append(parts[10])
+    TestiInfo.append(parts[11])
+    Projektinumero.append(parts[12])
 
-# OPC UA -asiakasasetukset
-opc_ua_url = "opc.tcp://10.10.10.1:4840"
+server_url = "opc.tcp://10.10.10.1:4840"  # Korvaa oikealla palvelimen URL:llä
 
-async def main():
-    # InfluxDB client
-    influx_client = InfluxDBClient(url=url, token=token, org=org)
-    write_api = influx_client.write_api(write_options=SYNCHRONOUS)
-    
-    # OPC UA client
-    async with Client(url=opc_ua_url) as client:
-        # Käy läpi kaikki node tiedot JSON-tiedostosta
-        for item in data["DataNodet"]:
-            # Erottimena '|'
-            parts = item.split('|')
-            value_node_id = parts[1]
-            measurement_name = parts[2]
-            tag_values = parts[3:]
+# Luo asiakas ja yhdistä OPC UA -palvelimeen
+client = Client(server_url)
+client.connect()
 
-            # Luo nodelle subscription
-            node = client.get_node(value_node_id)
-            handler = DataChangeHandler(write_api, measurement_name, tag_values)
-            subscription = await client.create_subscription(500, handler)
-            await subscription.subscribe_data_change(node)
+try:
+    for i in range(len(Nimet)):
+        NodeNimi = lue_opc_ua_node(client, Nimet[i])
+        NodeArvo = lue_opc_ua_node(client, Arvot[i])
+        if NodeNimi is not None:
+            NodeNimi = HaeTyyppi(NodeNimi)
+        else:
+            NodeNimi = "Unknown"
 
-        # Pidä yhteys auki
-        while True:
-            await asyncio.sleep(1)
+        if NodeArvo == False: 
+            NodeArvo = 0
+        elif NodeArvo == True:
+            NodeArvo = 1
 
-class DataChangeHandler:
-    def __init__(self, write_api, measurement_name, tag_values):
-        self.write_api = write_api
-        self.measurement_name = measurement_name
-        self.tag_values = tag_values
+        if NodeArvo is None:
+            NodeArvo = "Unknown"
 
-    def datachange_notification(self, node, val, data):
-        # Luo InfluxDB-piste
-        point = Point(self.measurement_name).field("value", val)
-        
-        # Lisää tagit pisteeseen
-        tags = ["tag1", "tag2", "tag3", "tag4", "tag5", "tag6", "tag7", "tag8", "tag9", "tag10", "tag11", "tag12"]
-        for i, tag in enumerate(tags):
-            point.tag(tag, self.tag_values[i])
+        print(f"{NodeNimi} = {NodeArvo}")
+finally:
+    # Katkaise yhteys
+    client.disconnect()
 
-        # Kirjoita data InfluxDB:hen
-        self.write_api.write(bucket=bucket, org=org, record=point)
-        print(f"Written to InfluxDB: {self.measurement_name} value={val}")
-
-if __name__ == "__main__":
-    asyncio.run(main())
