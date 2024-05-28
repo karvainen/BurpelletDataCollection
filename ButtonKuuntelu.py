@@ -16,6 +16,7 @@ opc_ua_url = "opc.tcp://10.10.10.1:4840"
 with open('ButtonNodet.json', 'r') as file:
     data = json.load(file)
 
+
 # OPC UA -klientin määritys
 client = Client(opc_ua_url)
 client.connect()
