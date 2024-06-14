@@ -1,9 +1,6 @@
-from flask import Flask, jsonify
 import pandas as pd
 from datetime import datetime, timedelta
 from influxdb_client import InfluxDBClient
-
-app = Flask(__name__)
 
 # InfluxDB asetukset
 token = "E9pLhUMQQqpfNJQuHx8scPF7tjLaIGUbQHvIigrq92OBJ7AGjRVT6hy4NqN9UVcfWTfI1G0CjDlz_kddJ4E52w=="
@@ -13,7 +10,7 @@ url = "http://10.10.10.10:8086"
 
 client = InfluxDBClient(url=url, token=token, org=org)
 
-def get_data():
+def get_runtime_hours():
     query = f'''
     from(bucket: "{bucket}")
       |> range(start: -1w)
@@ -28,12 +25,6 @@ def get_data():
             data.append((record.get_time(), record.get_measurement(), record.get_field(), record.get_value(), record.values["Part"]))
     
     df = pd.DataFrame(data, columns=['_time', '_measurement', '_field', '_value', 'Part'])
-    return df
-
-@app.route('/calculate_runtime', methods=['GET'])
-def calculate_runtime():
-    # Haetaan data
-    df = get_data()
     
     # Suodatetaan viimeisimmän viikon data
     end_time = df['_time'].max()
@@ -50,11 +41,14 @@ def calculate_runtime():
     if not filtered_df.empty:
         # Lasketaan aikaväli, jolloin kaikki ehdot täyttyvät
         filtered_df['_time'] = pd.to_datetime(filtered_df['_time'])
-        runtime = filtered_df['_time'].diff().dropna().apply(lambda x: x.total_seconds() / 60).sum()
+        runtime_minutes = filtered_df['_time'].diff().dropna().apply(lambda x: x.total_seconds() / 60).sum()
+        runtime_hours = runtime_minutes / 60
     else:
-        runtime = 0
+        runtime_hours = 0
     
-    return jsonify({'runtime_minutes': runtime})
+    return runtime_hours
 
+# Esimerkki funktion käytöstä
 if __name__ == '__main__':
-    app.run(debug=True)
+    runtime_hours = get_runtime_hours()/7
+    print(f'Koneen ajoaika viimeisimmän viikon aikana, päivässä Keskimäärin: {round(runtime_hours),1} tuntia')
