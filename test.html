@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>HMI Säätölaite</title>
+    <style>
+        canvas {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+    <h1>HMI Säätölaite</h1>
+    <div>
+        <label for="input">Sisäänmeno:</label>
+        <input type="number" id="input" value="0">
+    </div>
+    <div>
+        <label for="output">Ulostulo:</label>
+        <input type="number" id="output" value="0" readonly>
+    </div>
+    <div>
+        <h2>Säätöpisteet</h2>
+        <div id="controls">
+            <div>
+                <label for="point1">Piste 1:</label>
+                <input type="number" id="point1" value="0" class="point">
+            </div>
+            <div>
+                <label for="point2">Piste 2:</label>
+                <input type="number" id="point2" value="0" class="point">
+            </div>
+            <div>
+                <label for="point3">Piste 3:</label>
+                <input type="number" id="point3" value="0" class="point">
+            </div>
+            <div>
+                <label for="point4">Piste 4:</label>
+                <input type="number" id="point4" value="0" class="point">
+            </div>
+            <div>
+                <label for="point5">Piste 5:</label>
+                <input type="number" id="point5" value="0" class="point">
+            </div>
+            <div>
+                <label for="point6">Piste 6:</label>
+                <input type="number" id="point6" value="0" class="point">
+            </div>
+            <div>
+                <label for="point7">Piste 7:</label>
+                <input type="number" id="point7" value="0" class="point">
+            </div>
+        </div>
+    </div>
+    <canvas id="chart" width="500" height="400"></canvas>
+    <script>
+        const points = document.querySelectorAll('.point');
+        points.forEach(point => {
+            point.addEventListener('input', updateChart);
+        });
+
+        function updateChart() {
+            const ctx = document.getElementById('chart').getContext('2d');
+            const values = Array.from(points).map(point => parseFloat(point.value) || 0);
+            const output = values.reduce((a, b) => a + b, 0) / values.length;
+            document.getElementById('output').value = output.toFixed(2);
+
+            ctx.clearRect(0, 0, 500, 400);
+            ctx.beginPath();
+            ctx.moveTo(50, 400 - values[0] * 4);
+            values.forEach((value, index) => {
+                ctx.lineTo(50 + index * 70, 400 - value * 4);
+            });
+            ctx.stroke();
+        }
+
+        updateChart();
+    </script>
+</body>
+</html>

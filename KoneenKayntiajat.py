@@ -50,5 +50,5 @@ def get_runtime_hours():
 
 # Esimerkki funktion käytöstä
 if __name__ == '__main__':
-    runtime_hours = get_runtime_hours()/7
+    runtime_hours = get_runtime_hours()/5
     print(f'Koneen ajoaika viimeisimmän viikon aikana, päivässä Keskimäärin: {round(runtime_hours),1} tuntia')
