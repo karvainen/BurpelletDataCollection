@@ -1,0 +1,47 @@
+fbAnaIn_Grease PR311 L2
+fbAnaIn_Pressing nip PR301
+fbAnaIn_Pressing nip PR311
+fbDirectDrive_Hyd_Motor
+fbDirectDrive_HydCooler
+fbDirectDrive_HydHeating
+fbValve_301_Press
+fbValve_301_Lift
+fbValve_311_Press
+fbValve_311_Lift
+fbValve_Lube_Pump
+fbValve_Lube_Line_1
+fbValve_Lube_Line_2
+fbValve_Lube_A
+fbValve_Lube_B
+fbValve_PR301 floating piston
+fbValve_PR301 floating safety
+fbValve_PR311 floating piston
+fbValve_PR311 floating shaft safety
+fbDistributionscrew_SCR200
+fbLowerPressRoll_PR301
+fbUpperPressRoll_PR301
+fbAuxiliarydrive_PR301
+fbAirBlower_PR301
+fbEffluentfilterscraper_SCA302
+fbDischargeScrew_SCR303
+fbFeedScrew_SCR310
+fbFeedScrew_SCR300
+fbLowerPressRoll_PR311
+fbUpperPressRoll_PR311
+fbAuxiliarydrive_PR311
+fbAirBlower_PR311
+fbEffluentfilterscraper_SCA312
+fbDischargeScrew_SCR313
+fbSpillageliftingscraperconveyor_SCA501
+fbSpillagescraperconveyor_SCA500
+fbAnaIn_Oil temperature
+fbAnaIn_Oil level
+fbAnaIn_Pressure line PR311
+fbAnaIn_Pressure line PR301
+fbAnaIn_Grease PR301 L1
+fbAnaIn_Grease PR301 L2
+fbDI_RotationGuard_301_Efluent
+fbDI_RotationGuard_311_Efluent
+fbDI_RotationGuard_SCA500
+fbDI_RotationGuard_SCA501
+fbDI_RotationGuard_SCR200

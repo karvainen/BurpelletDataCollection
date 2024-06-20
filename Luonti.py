@@ -15,6 +15,7 @@ from influxdb_client import InfluxDBClient, Point, WritePrecision
 from influxdb_client.client.write_api import SYNCHRONOUS
 import asyncio
 import json
+import config
 def LueData(client, paikka, arvo):  
     try:
         # Muodosta node ID:t
@@ -86,59 +87,17 @@ Maa = []
 KoneenTyyppi = []
 TestiInfo = []
 ProjektiNumero = []
-###### Tässä ei ole kaikki, lisää puuttuvat ######
-Nodet = []
-Nodet.append("fbAnaIn_Grease PR311 L2")
-Nodet.append("fbAnaIn_Pressing nip PR301")
-Nodet.append("fbAnaIn_Pressing nip PR311")
-Nodet.append("fbDirectDrive_Hyd_Motor")
-Nodet.append("fbDirectDrive_HydCooler")
-Nodet.append("fbDirectDrive_HydHeating")
-Nodet.append("fbValve_301_Press")
-Nodet.append("fbValve_301_Lift")
-Nodet.append("fbValve_311_Press")
-Nodet.append("fbValve_311_Lift")
-Nodet.append("fbValve_Lube_Pump")
-Nodet.append("fbValve_Lube_Line_1")
-Nodet.append("fbValve_Lube_Line_2")
-Nodet.append("fbValve_Lube_A")
-Nodet.append("fbValve_Lube_B")
-Nodet.append("fbValve_PR301 floating piston")
-Nodet.append("fbValve_PR301 floating safety")
-Nodet.append("fbValve_PR311 floating piston")
-Nodet.append("fbValve_PR311 floating shaft safety")
-Nodet.append("fbDistributionscrew_SCR200")
-Nodet.append("fbLowerPressRoll_PR301")
-Nodet.append("fbUpperPressRoll_PR301")
-Nodet.append("fbAuxiliarydrive_PR301")
-Nodet.append("fbAirBlower_PR301")
-Nodet.append("fbEffluentfilterscraper_SCA302")
-Nodet.append("fbDischargeScrew_SCR303")
-Nodet.append("fbFeedScrew_SCR310")
-Nodet.append("fbFeedScrew_SCR300")
-Nodet.append("fbLowerPressRoll_PR311")
-Nodet.append("fbUpperPressRoll_PR311")
-Nodet.append("fbAuxiliarydrive_PR311")
-Nodet.append("fbAirBlower_PR311")
-Nodet.append("fbEffluentfilterscraper_SCA312")
-Nodet.append("fbDischargeScrew_SCR313")
-Nodet.append("fbSpillageliftingscraperconveyor_SCA501")
-Nodet.append("fbSpillagescraperconveyor_SCA500")
-Nodet.append("fbAnaIn_Oil temperature")
-Nodet.append("fbAnaIn_Oil level")
-Nodet.append("fbAnaIn_Pressure line PR311")
-Nodet.append("fbAnaIn_Pressure line PR301")
-Nodet.append("fbAnaIn_Grease PR301 L1")
-Nodet.append("fbAnaIn_Grease PR301 L2")
 
-Nodet.append("fbDI_RotationGuard_301_Efluent")
-Nodet.append("fbDI_RotationGuard_311_Efluent")
-Nodet.append("fbDI_RotationGuard_SCA500")
-Nodet.append("fbDI_RotationGuard_SCA501")
-Nodet.append("fbDI_RotationGuard_SCR200")
+
+
+with open('nodes.txt', 'r') as file:
+    Nodet = [line.strip() for line in file.readlines()]
+
+
+
 
 # Luo OPC UA -asiakasobjekti ja määritä palvelimen URL
-url = opcua_url = "opc.tcp://10.10.10.1:4840"
+url = config.plc_ip
 client = Client(url)
 
 try:
@@ -264,6 +223,7 @@ try:
 
                 print(f"Haettu Data: {HaettuNimi} Paikka: {Paikka[i]} Tagi: {Tagit[i]} Testi: {Testi}")
                 DataNodet.append(f'{HaettuNimi}|ns=3;s="{Paikka[i]}"."stHMI"."stData"[{j}]."fValue"|{Nimet[i]}|{Paikka[i]}|{Erppi[i]}|{Tagit[i]}|{Sarjanumero[i]}|{Hys[i]}|{intervalli[i]}|{Maa[i]}|{KoneenTyyppi[i]}|{TestiInfo[i]}|{ProjektiNumero[i]}')
+                DataNodet.append("TestInfo|ns=3;s=\"dbCommonData\".\"stHMI\".\"stProjectData\".\"sTestingInfo\"|TestInfo|TestInfo|TestInfo|TestInfo|TestInfo|TestInfo|TestInfo|TestInfo|TestInfo|TestInfo|TestInfo")
             except Exception as e:
                 print(f"Paikkaa {Paikka[i]} ei pystytty lukemaan, numero j = {j}, numero i = {i}")
 
