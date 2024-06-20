@@ -189,11 +189,6 @@
         "LimMinMin|ns=3;s=\"fbAnaIn_Grease PR301 L2\".\"stHMI\".\"stParameter\"[2].\"fValue\"|Lub pressure L2|fbAnaIn_Grease PR301 L2|999|LU60-PIA2|202|10|True|SPA|HP|Production|622127",
         "LimMin|ns=3;s=\"fbAnaIn_Grease PR301 L2\".\"stHMI\".\"stParameter\"[3].\"fValue\"|Lub pressure L2|fbAnaIn_Grease PR301 L2|999|LU60-PIA2|202|10|True|SPA|HP|Production|622127",
         "LimMax|ns=3;s=\"fbAnaIn_Grease PR301 L2\".\"stHMI\".\"stParameter\"[4].\"fValue\"|Lub pressure L2|fbAnaIn_Grease PR301 L2|999|LU60-PIA2|202|10|True|SPA|HP|Production|622127",
-        "LimMaxMax|ns=3;s=\"fbAnaIn_Grease PR301 L2\".\"stHMI\".\"stParameter\"[5].\"fValue\"|Lub pressure L2|fbAnaIn_Grease PR301 L2|999|LU60-PIA2|202|10|True|SPA|HP|Production|622127",
-        "TripTime|ns=3;s=\"fbDI_RotationGuard_301_Efluent\".\"stHMI\".\"stParameter\"[0].\"fValue\"|Rot Guard|fbDI_RotationGuard_301_Efluent|999|SCA302-S1|203|10|False|SPA|HP|Production|622127",
-        "TripTime|ns=3;s=\"fbDI_RotationGuard_311_Efluent\".\"stHMI\".\"stParameter\"[0].\"fValue\"|Rot Guard|fbDI_RotationGuard_311_Efluent|999|SCA312-S1|202|10|False|SPA|HP|Production|622127",
-        "TripTime|ns=3;s=\"fbDI_RotationGuard_SCA500\".\"stHMI\".\"stParameter\"[0].\"fValue\"|Rot Guard|fbDI_RotationGuard_SCA500|999|SCA500-S1|200|10|False|SPA|HP|Production|622127",
-        "TripTime|ns=3;s=\"fbDI_RotationGuard_SCA501\".\"stHMI\".\"stParameter\"[0].\"fValue\"|Rot Guard|fbDI_RotationGuard_SCA501|999|SCA501-S1|202|10|False|SPA|HP|Production|622127",
-        "TripTime|ns=3;s=\"fbDI_RotationGuard_SCR200\".\"stHMI\".\"stParameter\"[0].\"fValue\"|Rot Guard|fbDI_RotationGuard_SCR200|999|SCR200-S1|200|10|False|SPA|HP|Production|622127"
+        "LimMaxMax|ns=3;s=\"fbAnaIn_Grease PR301 L2\".\"stHMI\".\"stParameter\"[5].\"fValue\"|Lub pressure L2|fbAnaIn_Grease PR301 L2|999|LU60-PIA2|202|10|True|SPA|HP|Production|622127"
     ]
 }

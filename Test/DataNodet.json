@@ -182,7 +182,6 @@
         "Digital In|ns=3;s=\"fbDI_RotationGuard_311_Efluent\".\"stHMI\".\"stData\"[0].\"fValue\"|Rot Guard|fbDI_RotationGuard_311_Efluent|999|SCA312-S1|202|10|False|SPA|HP|Production|622127",
         "Digital In|ns=3;s=\"fbDI_RotationGuard_SCA500\".\"stHMI\".\"stData\"[0].\"fValue\"|Rot Guard|fbDI_RotationGuard_SCA500|999|SCA500-S1|200|10|False|SPA|HP|Production|622127",
         "Not valid|ns=3;s=\"fbDI_RotationGuard_SCA501\".\"stHMI\".\"stData\"[0].\"fValue\"|Rot Guard|fbDI_RotationGuard_SCA501|999|SCA501-S1|202|10|False|SPA|HP|Production|622127",
-        "Digital In|ns=3;s=\"fbDI_RotationGuard_SCR200\".\"stHMI\".\"stData\"[0].\"fValue\"|Rot Guard|fbDI_RotationGuard_SCR200|999|SCR200-S1|200|10|False|SPA|HP|Production|622127",
-        "TestInfo|ns=3;s=\"dbCommonData\".\"stHMI\".\"stProjectData\".\"sTestingInfo\"|TestInfo|TestInfo|TestInfo|TestInfo|TestInfo|TestInfo|TestInfo|TestInfo|TestInfo|TestInfo|TestInfo"
+        "Digital In|ns=3;s=\"fbDI_RotationGuard_SCR200\".\"stHMI\".\"stData\"[0].\"fValue\"|Rot Guard|fbDI_RotationGuard_SCR200|999|SCR200-S1|200|10|False|SPA|HP|Production|622127"
     ]
 }

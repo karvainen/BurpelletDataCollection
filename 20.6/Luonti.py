@@ -10,6 +10,7 @@
 #################################################################################
 
 from opcua import Client, ua
+import config
 from influxdb_client import InfluxDBClient, Point, WriteOptions
 from influxdb_client import InfluxDBClient, Point, WritePrecision
 from influxdb_client.client.write_api import SYNCHRONOUS
@@ -47,7 +48,6 @@ device_type_dict = {
     6: "Torque_n2_Nm",
     7: "Power",
     8: "Voltage",
-    9: "Energy",
     10: "Temperature",
     11: "Position",
     12: "Pressure",
@@ -89,7 +89,6 @@ ProjektiNumero = []
 ###### Tässä ei ole kaikki, lisää puuttuvat ######
 Nodet = []
 Nodet.append("fbAnaIn_Grease PR311 L2")
-Nodet.append("fbAnaIn_Pressing nip PR301")
 Nodet.append("fbAnaIn_Pressing nip PR311")
 Nodet.append("fbDirectDrive_Hyd_Motor")
 Nodet.append("fbDirectDrive_HydCooler")
@@ -115,7 +114,6 @@ Nodet.append("fbAirBlower_PR301")
 Nodet.append("fbEffluentfilterscraper_SCA302")
 Nodet.append("fbDischargeScrew_SCR303")
 Nodet.append("fbFeedScrew_SCR310")
-Nodet.append("fbFeedScrew_SCR300")
 Nodet.append("fbLowerPressRoll_PR311")
 Nodet.append("fbUpperPressRoll_PR311")
 Nodet.append("fbAuxiliarydrive_PR311")
@@ -131,14 +129,8 @@ Nodet.append("fbAnaIn_Pressure line PR301")
 Nodet.append("fbAnaIn_Grease PR301 L1")
 Nodet.append("fbAnaIn_Grease PR301 L2")
 
-Nodet.append("fbDI_RotationGuard_301_Efluent")
-Nodet.append("fbDI_RotationGuard_311_Efluent")
-Nodet.append("fbDI_RotationGuard_SCA500")
-Nodet.append("fbDI_RotationGuard_SCA501")
-Nodet.append("fbDI_RotationGuard_SCR200")
-
 # Luo OPC UA -asiakasobjekti ja määritä palvelimen URL
-url = opcua_url = "opc.tcp://10.10.10.1:4840"
+url = config.opcua_url
 client = Client(url)
 
 try:
@@ -259,10 +251,8 @@ try:
         for j in range(DataKpl[i]):
             try:
                 HaettuNimi = client.get_node(f'ns=3;s="{Paikka[i]}"."stHMI"."stData"[{j}]."eValueType"').get_value()
-                Testi = HaettuNimi
                 HaettuNimi = HaeTyyppi(HaettuNimi)
-
-                print(f"Haettu Data: {HaettuNimi} Paikka: {Paikka[i]} Tagi: {Tagit[i]} Testi: {Testi}")
+                print(f"Haettu nimi: {HaettuNimi}")
                 DataNodet.append(f'{HaettuNimi}|ns=3;s="{Paikka[i]}"."stHMI"."stData"[{j}]."fValue"|{Nimet[i]}|{Paikka[i]}|{Erppi[i]}|{Tagit[i]}|{Sarjanumero[i]}|{Hys[i]}|{intervalli[i]}|{Maa[i]}|{KoneenTyyppi[i]}|{TestiInfo[i]}|{ProjektiNumero[i]}')
             except Exception as e:
                 print(f"Paikkaa {Paikka[i]} ei pystytty lukemaan, numero j = {j}, numero i = {i}")
@@ -273,7 +263,6 @@ try:
         for j in range(NapitKpl[i]):
                     try:
                         HaettuNimi = client.get_node(f'ns=3;s="{Paikka[i]}"."stHMI"."stButtons"[{j}]."sName"').get_value()
-                        print(f"Haettu nappi: {HaettuNimi} Paikka: {Paikka[i]} Tagi: {Tagit[i]}")
                         ButtonNodet.append(f'{HaettuNimi}|ns=3;s="{Paikka[i]}"."stHMI"."stButtons"[{j}]."bStateMemory"|{Nimet[i]}|{Paikka[i]}|{Erppi[i]}|{Tagit[i]}|{Sarjanumero[i]}|{Hys[i]}|{intervalli[i]}|{Maa[i]}|{KoneenTyyppi[i]}|{TestiInfo[i]}|{ProjektiNumero[i]}')
                     except Exception as e:
                         print(f"Napit ei pystytty lukemaan")
@@ -286,7 +275,7 @@ try:
             try:
                 Vianhaku = (f'ns=3;s="{Paikka[i]}"."stHMI"."stParameter"[{j}]."sName"')
                 HaettuNimi = client.get_node(f'ns=3;s="{Paikka[i]}"."stHMI"."stParameter"[{j}]."sName"').get_value()     
-                print(f"Haettu parametri: {HaettuNimi} Paikka: {Paikka[i]} Tagi: {Tagit[i]}")
+                print(f"Haettu nimi: {HaettuNimi}")
                 ParmetriNodet.append(f'{HaettuNimi}|ns=3;s="{Paikka[i]}"."stHMI"."stParameter"[{j}]."fValue"|{Nimet[i]}|{Paikka[i]}|{Erppi[i]}|{Tagit[i]}|{Sarjanumero[i]}|{Hys[i]}|{intervalli[i]}|{Maa[i]}|{KoneenTyyppi[i]}|{TestiInfo[i]}|{ProjektiNumero[i]}')
             except Exception as e:
                 print(f"Nodea {Vianhaku} ei pystytty lukemaan, numero j = {j}, numero i = {i}")

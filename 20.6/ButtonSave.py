@@ -6,7 +6,7 @@ from influxdb_client.client.write_api import SYNCHRONOUS
 # InfluxDB yhteystiedot
 token = "E9pLhUMQQqpfNJQuHx8scPF7tjLaIGUbQHvIigrq92OBJ7AGjRVT6hy4NqN9UVcfWTfI1G0CjDlz_kddJ4E52w=="
 org = "Burpellet"
-bucket = "DataCollection"
+bucket = "NewDataCollection"
 url = "http://10.10.10.10:8086"
 
 # OPC UA -asiakasasetukset
@@ -28,30 +28,23 @@ write_api = influx_client.write_api(write_options=SYNCHRONOUS)
 # Aiempi arvojen tallennus
 previous_values = {}
 
-
-def write_to_influxdb(measurement_name, alue, node_name, erp_code, tags, serjies_no, hys, value, country, type):
+def write_to_influxdb(measurement_name, alue, node_name, erp_code, tags, serjies_no, hys, value):
     if value is True:
         value = 1
     elif value is False:
         value = 0
-    
-    global influx_client, write_api
-    point = Point("Button") \
-        .tag("Part", alue) \
-        .tag("ERP", erp_code) \
-        .tag("Tag", tags) \
-        .tag("SerialNumber", serjies_no) \
-        .tag("Country", country) \
-        .tag("Type", type) \
-        .field(measurement_name, value)
-    
-    
 
+    point = Point("Button") \
+        .tag("Name", measurement_name) \
+        .tag("Alue", alue) \
+        .tag("ErpCode", erp_code) \
+        .tag("Tags", tags) \
+        .tag("Serjies no", serjies_no) \
+        .tag("Hys", hys) \
+        .field("value", value)
     ##### Tallentaa napin arvon, vain jos se on 1   
     if value == 1:
         write_api.write(bucket=bucket, org=org, record=point)
-        print(f"Nappia painettu: {measurement_name}={value}, {node_name}")
-
 
 def parse_data_node(node_data):
     parts = node_data.split('|')
@@ -59,13 +52,11 @@ def parse_data_node(node_data):
         'measurement_name': parts[0],
         'node_id_value': parts[1],
         'alue': parts[2],
-        'node_name': parts[3],  # Lisätty node_name
+        'node_name': parts[3],
         'erp_code': parts[4],
         'tags': parts[5],
         'serjies_no': parts[6],
-        'hys': parts[7],
-        'country': parts[9],  # Lisätty country
-        'Type': parts[10]
+        'hys': parts[7]
     }
 
 def check_value_change(node_info):
@@ -77,7 +68,7 @@ def check_value_change(node_info):
     
     if previous_value is None or current_value != previous_value:
         write_to_influxdb(node_info['measurement_name'], node_info['alue'], node_info['node_name'],
-                          node_info['erp_code'], node_info['tags'], node_info['serjies_no'], node_info['hys'], current_value, node_info['country'], node_info['Type'])
+                          node_info['erp_code'], node_info['tags'], node_info['serjies_no'], node_info['hys'], current_value)
         previous_values[node_info['node_id_value']] = current_value
         print(f"Value changed for {node_info['node_name']}")
 

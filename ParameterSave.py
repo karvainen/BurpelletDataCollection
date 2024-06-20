@@ -7,7 +7,7 @@ from influxdb_client.client.write_api import SYNCHRONOUS
 # InfluxDB yhteystiedot
 token = "E9pLhUMQQqpfNJQuHx8scPF7tjLaIGUbQHvIigrq92OBJ7AGjRVT6hy4NqN9UVcfWTfI1G0CjDlz_kddJ4E52w=="
 org = "Burpellet"
-bucket = "NewDataCollection"
+bucket = "DataCollection"
 url = "http://10.10.10.10:8086"
 
 # OPC UA -asiakasasetukset
@@ -48,17 +48,16 @@ influx_client, write_api = create_influxdb_client()
 # Aiempi arvojen tallennus
 previous_values = {}
 
-def write_to_influxdb(measurement_name, alue, node_name, erp_code, tags, serjies_no, hys, value):
+def write_to_influxdb(measurement_name, alue, node_name, erp_code, tags, serjies_no, hys, value, country, Type):
     global influx_client, write_api
     point = Point("Parameter") \
-        .tag("Name", measurement_name) \
-        .tag("Alue", alue) \
-        .tag("NodeName", node_name) \
-        .tag("ErpCode", erp_code) \
-        .tag("Tags", tags) \
-        .tag("Serjies no", serjies_no) \
-        .tag("Hys", hys) \
-        .field("value", value)
+        .tag("Part", alue) \
+        .tag("Country", country) \
+        .tag("ERP", erp_code) \
+        .tag("Tag", tags) \
+        .tag("SerialNumber", serjies_no) \
+        .tag("Type", Type) \
+        .field(measurement_name, value)
     
     while True:
         try:
@@ -78,7 +77,9 @@ def parse_data_node(node_data):
         'erp_code': parts[4],
         'tags': parts[5],
         'serjies_no': parts[6],
-        'hys': parts[7]
+        'hys': parts[7],
+        'country': parts[9],
+        'Type': parts[10]
     }
 
 def check_value_change(node_info):
@@ -99,7 +100,7 @@ def check_value_change(node_info):
     
     if previous_value is None or current_value != previous_value:
         write_to_influxdb(node_info['measurement_name'], node_info['alue'], node_info['node_name'],
-                          node_info['erp_code'], node_info['tags'], node_info['serjies_no'], node_info['hys'], current_value)
+                          node_info['erp_code'], node_info['tags'], node_info['serjies_no'], node_info['hys'], current_value, node_info['country'], node_info['Type'])
         previous_values[node_info['node_id_value']] = current_value
         print(f"Value changed for {node_info['node_name']}")
 
@@ -108,7 +109,7 @@ try:
     while True:
         for node_info in parsed_data_nodes:
             check_value_change(node_info)
-        time.sleep(1)  # Odota 1 sekunti ennen seuraavaa kyselyä
+        time.sleep(5)  # Odota 1 sekunti ennen seuraavaa kyselyä
 except KeyboardInterrupt:
     try:
         client.disconnect()

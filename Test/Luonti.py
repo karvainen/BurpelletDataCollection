@@ -47,7 +47,6 @@ device_type_dict = {
     6: "Torque_n2_Nm",
     7: "Power",
     8: "Voltage",
-    9: "Energy",
     10: "Temperature",
     11: "Position",
     12: "Pressure",
@@ -130,12 +129,6 @@ Nodet.append("fbAnaIn_Pressure line PR311")
 Nodet.append("fbAnaIn_Pressure line PR301")
 Nodet.append("fbAnaIn_Grease PR301 L1")
 Nodet.append("fbAnaIn_Grease PR301 L2")
-
-Nodet.append("fbDI_RotationGuard_301_Efluent")
-Nodet.append("fbDI_RotationGuard_311_Efluent")
-Nodet.append("fbDI_RotationGuard_SCA500")
-Nodet.append("fbDI_RotationGuard_SCA501")
-Nodet.append("fbDI_RotationGuard_SCR200")
 
 # Luo OPC UA -asiakasobjekti ja määritä palvelimen URL
 url = opcua_url = "opc.tcp://10.10.10.1:4840"

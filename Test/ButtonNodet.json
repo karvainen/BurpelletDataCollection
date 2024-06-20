@@ -182,21 +182,6 @@
         "TeachMin|ns=3;s=\"fbAnaIn_Grease PR301 L2\".\"stHMI\".\"stButtons\"[0].\"bStateMemory\"|Lub pressure L2|fbAnaIn_Grease PR301 L2|999|LU60-PIA2|202|10|True|SPA|HP|Production|622127",
         "TeachMax|ns=3;s=\"fbAnaIn_Grease PR301 L2\".\"stHMI\".\"stButtons\"[1].\"bStateMemory\"|Lub pressure L2|fbAnaIn_Grease PR301 L2|999|LU60-PIA2|202|10|True|SPA|HP|Production|622127",
         "Simulate|ns=3;s=\"fbAnaIn_Grease PR301 L2\".\"stHMI\".\"stButtons\"[2].\"bStateMemory\"|Lub pressure L2|fbAnaIn_Grease PR301 L2|999|LU60-PIA2|202|10|True|SPA|HP|Production|622127",
-        "Service|ns=3;s=\"fbAnaIn_Grease PR301 L2\".\"stHMI\".\"stButtons\"[3].\"bStateMemory\"|Lub pressure L2|fbAnaIn_Grease PR301 L2|999|LU60-PIA2|202|10|True|SPA|HP|Production|622127",
-        "ForceON|ns=3;s=\"fbDI_RotationGuard_301_Efluent\".\"stHMI\".\"stButtons\"[0].\"bStateMemory\"|Rot Guard|fbDI_RotationGuard_301_Efluent|999|SCA302-S1|203|10|False|SPA|HP|Production|622127",
-        "ForceOFF|ns=3;s=\"fbDI_RotationGuard_301_Efluent\".\"stHMI\".\"stButtons\"[1].\"bStateMemory\"|Rot Guard|fbDI_RotationGuard_301_Efluent|999|SCA302-S1|203|10|False|SPA|HP|Production|622127",
-        "Invert|ns=3;s=\"fbDI_RotationGuard_301_Efluent\".\"stHMI\".\"stButtons\"[2].\"bStateMemory\"|Rot Guard|fbDI_RotationGuard_301_Efluent|999|SCA302-S1|203|10|False|SPA|HP|Production|622127",
-        "ForceON|ns=3;s=\"fbDI_RotationGuard_311_Efluent\".\"stHMI\".\"stButtons\"[0].\"bStateMemory\"|Rot Guard|fbDI_RotationGuard_311_Efluent|999|SCA312-S1|202|10|False|SPA|HP|Production|622127",
-        "ForceOFF|ns=3;s=\"fbDI_RotationGuard_311_Efluent\".\"stHMI\".\"stButtons\"[1].\"bStateMemory\"|Rot Guard|fbDI_RotationGuard_311_Efluent|999|SCA312-S1|202|10|False|SPA|HP|Production|622127",
-        "Invert|ns=3;s=\"fbDI_RotationGuard_311_Efluent\".\"stHMI\".\"stButtons\"[2].\"bStateMemory\"|Rot Guard|fbDI_RotationGuard_311_Efluent|999|SCA312-S1|202|10|False|SPA|HP|Production|622127",
-        "ForceON|ns=3;s=\"fbDI_RotationGuard_SCA500\".\"stHMI\".\"stButtons\"[0].\"bStateMemory\"|Rot Guard|fbDI_RotationGuard_SCA500|999|SCA500-S1|200|10|False|SPA|HP|Production|622127",
-        "ForceOFF|ns=3;s=\"fbDI_RotationGuard_SCA500\".\"stHMI\".\"stButtons\"[1].\"bStateMemory\"|Rot Guard|fbDI_RotationGuard_SCA500|999|SCA500-S1|200|10|False|SPA|HP|Production|622127",
-        "Invert|ns=3;s=\"fbDI_RotationGuard_SCA500\".\"stHMI\".\"stButtons\"[2].\"bStateMemory\"|Rot Guard|fbDI_RotationGuard_SCA500|999|SCA500-S1|200|10|False|SPA|HP|Production|622127",
-        "ForceON|ns=3;s=\"fbDI_RotationGuard_SCA501\".\"stHMI\".\"stButtons\"[0].\"bStateMemory\"|Rot Guard|fbDI_RotationGuard_SCA501|999|SCA501-S1|202|10|False|SPA|HP|Production|622127",
-        "ForceOFF|ns=3;s=\"fbDI_RotationGuard_SCA501\".\"stHMI\".\"stButtons\"[1].\"bStateMemory\"|Rot Guard|fbDI_RotationGuard_SCA501|999|SCA501-S1|202|10|False|SPA|HP|Production|622127",
-        "Invert|ns=3;s=\"fbDI_RotationGuard_SCA501\".\"stHMI\".\"stButtons\"[2].\"bStateMemory\"|Rot Guard|fbDI_RotationGuard_SCA501|999|SCA501-S1|202|10|False|SPA|HP|Production|622127",
-        "ForceON|ns=3;s=\"fbDI_RotationGuard_SCR200\".\"stHMI\".\"stButtons\"[0].\"bStateMemory\"|Rot Guard|fbDI_RotationGuard_SCR200|999|SCR200-S1|200|10|False|SPA|HP|Production|622127",
-        "ForceOFF|ns=3;s=\"fbDI_RotationGuard_SCR200\".\"stHMI\".\"stButtons\"[1].\"bStateMemory\"|Rot Guard|fbDI_RotationGuard_SCR200|999|SCR200-S1|200|10|False|SPA|HP|Production|622127",
-        "Invert|ns=3;s=\"fbDI_RotationGuard_SCR200\".\"stHMI\".\"stButtons\"[2].\"bStateMemory\"|Rot Guard|fbDI_RotationGuard_SCR200|999|SCR200-S1|200|10|False|SPA|HP|Production|622127"
+        "Service|ns=3;s=\"fbAnaIn_Grease PR301 L2\".\"stHMI\".\"stButtons\"[3].\"bStateMemory\"|Lub pressure L2|fbAnaIn_Grease PR301 L2|999|LU60-PIA2|202|10|True|SPA|HP|Production|622127"
     ]
 }

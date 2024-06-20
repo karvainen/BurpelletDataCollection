@@ -1,11 +1,11 @@
 import json
 import time
+import threading
+import timeit
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from opcua import Client, ua
 from influxdb_client import InfluxDBClient, Point
 from influxdb_client.client.write_api import SYNCHRONOUS
-
-global TestInfo
-TestInfo = "Production"
 
 # InfluxDB yhteystiedot
 token = "E9pLhUMQQqpfNJQuHx8scPF7tjLaIGUbQHvIigrq92OBJ7AGjRVT6hy4NqN9UVcfWTfI1G0CjDlz_kddJ4E52w=="
@@ -52,30 +52,23 @@ influx_client, write_api = create_influxdb_client()
 previous_values = {}
 
 def write_to_influxdb(measurement_name, alue, node_name, erp_code, tags, serjies_no, hys, value, country, type):
-    global TestInfo
-    if measurement_name != "TestInfo":
-
-        global influx_client, write_api
-        point = Point("Data") \
-            .tag("TestInfo", TestInfo) \
-            .tag("Part", alue) \
-            .tag("ERP", erp_code) \
-            .tag("Tag", tags) \
-            .tag("SerialNumber", serjies_no) \
-            .tag("Country", country) \
-            .tag("Type", type) \
-            .field(measurement_name, value)
-        
-        while True:
-            try:
-                write_api.write(bucket=bucket, org=org, record=point)
-                break
-            except Exception as e:
-                print(f"Failed to write to InfluxDB: {e}")
-                influx_client, write_api = create_influxdb_client()
-    else:
-        TestInfo = value
-
+    global influx_client, write_api
+    point = Point("Data") \
+        .tag("Part", alue) \
+        .tag("ERP", erp_code) \
+        .tag("Tag", tags) \
+        .tag("SerialNumper", serjies_no) \
+        .tag("Country", country) \
+        .tag("Type", type) \
+        .field(measurement_name, value)
+    
+    while True:
+        try:
+            write_api.write(bucket=bucket, org=org, record=point)
+            break
+        except Exception as e:
+            print(f"Failed to write to InfluxDB: {e}")
+            influx_client, write_api = create_influxdb_client()
 
 def parse_data_node(node_data):
     parts = node_data.split('|')
@@ -95,8 +88,10 @@ def parse_data_node(node_data):
 def check_value_change(node_info):
     global previous_values, client
     try:
+        start_read = timeit.default_timer()
         node = client.get_node(node_info['node_id_value'])
         current_value = node.get_value()
+        elapsed_read = timeit.default_timer() - start_read
     except Exception as e:
         print(f"Error reading value from OPC UA: {e}")
         try:
@@ -109,17 +104,27 @@ def check_value_change(node_info):
     previous_value = previous_values.get(node_info['node_id_value'])
     
     if previous_value is None or current_value != previous_value:
+        start_write = timeit.default_timer()
         write_to_influxdb(node_info['measurement_name'], node_info['alue'], node_info['node_name'],
                           node_info['erp_code'], node_info['tags'], node_info['serjies_no'], node_info['hys'], current_value, node_info['country'], node_info['Type'])
+        elapsed_write = timeit.default_timer() - start_write
         previous_values[node_info['node_id_value']] = current_value
-        print(f"Value changed for {node_info['node_name']}")
+        print(f"Value changed for {node_info['node_name']} (Read: {elapsed_read:.4f}s, Write: {elapsed_write:.4f}s)")
+
+def process_node(node_info):
+    start_time = timeit.default_timer()
+    check_value_change(node_info)
+    elapsed_time = timeit.default_timer() - start_time
+    print(f"Processing node {node_info['node_name']} took {elapsed_time:.4f} seconds")
 
 try:
     parsed_data_nodes = [parse_data_node(node_data) for node_data in data['DataNodet']]
-    while True:
-        for node_info in parsed_data_nodes:
-            check_value_change(node_info)
-        time.sleep(0)  # Odota 1 sekunti ennen seuraavaa kyselyä
+    with ThreadPoolExecutor(max_workers=10) as executor:
+        while True:
+            futures = [executor.submit(process_node, node_info) for node_info in parsed_data_nodes]
+            for future in as_completed(futures):
+                future.result()
+            time.sleep(1)  # Odota 1 sekunti ennen seuraavaa kyselyä
 except KeyboardInterrupt:
     try:
         client.disconnect()
