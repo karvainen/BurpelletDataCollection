@@ -3,18 +3,14 @@ import time
 from opcua import Client, ua
 from influxdb_client import InfluxDBClient, Point
 from influxdb_client.client.write_api import SYNCHRONOUS
+import config
 
 global TestInfo
 TestInfo = "Production"
 
-# InfluxDB yhteystiedot
-token = "E9pLhUMQQqpfNJQuHx8scPF7tjLaIGUbQHvIigrq92OBJ7AGjRVT6hy4NqN9UVcfWTfI1G0CjDlz_kddJ4E52w=="
-org = "Burpellet"
-bucket = "DataCollection"
-url = "http://10.10.10.10:8086"
 
-# OPC UA -asiakasasetukset
-opc_ua_url = "opc.tcp://10.10.10.1:4840"
+
+
 
 # Lue DataNodet.json tiedosto
 with open('DataNodet.json', 'r') as file:
@@ -23,12 +19,12 @@ with open('DataNodet.json', 'r') as file:
 def create_opc_ua_client():
     while True:
         try:
-            client = Client(opc_ua_url)
+            client = Client(config.plc_ip)
             client.connect()
             print("Connected to OPC UA")
             return client
         except Exception as e:
-            print(f"Failed to connect to OPC UA: {e}")
+            print(f"No connect to PLC Check connection !!! {e}")
             time.sleep(5)  # Yritä uudelleen 5 sekunnin kuluttua
 
 # OPC UA -klientin määritys
@@ -37,7 +33,7 @@ client = create_opc_ua_client()
 def create_influxdb_client():
     while True:
         try:
-            influx_client = InfluxDBClient(url=url, token=token)
+            influx_client = InfluxDBClient(url=config.influx_ip, token=config.token)
             write_api = influx_client.write_api(write_options=SYNCHRONOUS)
             print("Connected to InfluxDB")
             return influx_client, write_api
@@ -68,7 +64,7 @@ def write_to_influxdb(measurement_name, alue, node_name, erp_code, tags, serjies
         
         while True:
             try:
-                write_api.write(bucket=bucket, org=org, record=point)
+                write_api.write(bucket=config.bucket, org=config.org, record=point)
                 break
             except Exception as e:
                 print(f"Failed to write to InfluxDB: {e}")
