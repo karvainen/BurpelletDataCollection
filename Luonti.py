@@ -1,10 +1,10 @@
 #################################################################################
-##### FirstFile.py                                                          #####
+##### Luonti.py                                                             #####
 #####                                                                       #####
 ##### Lukee ensimmäisellä käynnistyskerralla konekohtaiset tiedot           #####
-##### Tekee niistä pythonille ST_ProjectData.py tiedoston                   #####
+##### Tekee niistä pythonille json tiedostot, jossa nodet                   #####
 #####                                                                       #####
-##### Ei vielä valmis.                                                      #####
+#####                                                                       #####
 #####                                                                       #####
 ##### @Juha Pihlajamäki Saalasti FINLAND Oy                                 #####
 #################################################################################
@@ -247,6 +247,7 @@ try:
                 Vianhaku = (f'ns=3;s="{Paikka[i]}"."stHMI"."stParameter"[{j}]."sName"')
                 HaettuNimi = client.get_node(f'ns=3;s="{Paikka[i]}"."stHMI"."stParameter"[{j}]."sName"').get_value()     
                 print(f"Haettu parametri: {HaettuNimi} Paikka: {Paikka[i]} Tagi: {Tagit[i]}")
+                ParmetriNodet.append("TestInfo|ns=3;s=\"dbCommonData\".\"stHMI\".\"stProjectData\".\"sTestingInfo\"|TestInfo|TestInfo|TestInfo|TestInfo|TestInfo|TestInfo|TestInfo|TestInfo|TestInfo|TestInfo|TestInfo")
                 ParmetriNodet.append(f'{HaettuNimi}|ns=3;s="{Paikka[i]}"."stHMI"."stParameter"[{j}]."fValue"|{Nimet[i]}|{Paikka[i]}|{Erppi[i]}|{Tagit[i]}|{Sarjanumero[i]}|{Hys[i]}|{intervalli[i]}|{Maa[i]}|{KoneenTyyppi[i]}|{TestiInfo[i]}|{ProjektiNumero[i]}')
             except Exception as e:
                 print(f"Nodea {Vianhaku} ei pystytty lukemaan, numero j = {j}, numero i = {i}")

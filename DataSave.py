@@ -6,7 +6,7 @@ from influxdb_client.client.write_api import SYNCHRONOUS
 import config
 
 global TestInfo
-TestInfo = "Production"
+TestInfo = "Normal"
 
 
 

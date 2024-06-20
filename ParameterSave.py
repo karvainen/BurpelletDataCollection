@@ -3,15 +3,17 @@ import time
 from opcua import Client, ua
 from influxdb_client import InfluxDBClient, Point
 from influxdb_client.client.write_api import SYNCHRONOUS
+import config
+
 
 # InfluxDB yhteystiedot
-token = "E9pLhUMQQqpfNJQuHx8scPF7tjLaIGUbQHvIigrq92OBJ7AGjRVT6hy4NqN9UVcfWTfI1G0CjDlz_kddJ4E52w=="
-org = "Burpellet"
-bucket = "DataCollection"
-url = "http://10.10.10.10:8086"
+token = config.token
+org = config.org
+bucket = config.bucket
+url = config.influx_ip
 
 # OPC UA -asiakasasetukset
-opc_ua_url = "opc.tcp://10.10.10.1:4840"
+opc_ua_url = config.plc_ip
 
 # Lue DataNodet.json tiedosto
 with open('ParmetriNodet.json', 'r') as file:
@@ -50,8 +52,13 @@ previous_values = {}
 
 def write_to_influxdb(measurement_name, alue, node_name, erp_code, tags, serjies_no, hys, value, country, Type):
     global influx_client, write_api
+    global TestInfo
+    if measurement_name == "TestInfo":
+        TestInfo = value
+    
     point = Point("Parameter") \
         .tag("Part", alue) \
+        .tag("TestInfo", TestInfo) \
         .tag("Country", country) \
         .tag("ERP", erp_code) \
         .tag("Tag", tags) \
@@ -61,7 +68,9 @@ def write_to_influxdb(measurement_name, alue, node_name, erp_code, tags, serjies
     
     while True:
         try:
-            write_api.write(bucket=bucket, org=org, record=point)
+            if measurement_name != "TestInfo":
+                write_api.write(bucket=bucket, org=org, record=point)
+            
             break
         except Exception as e:
             print(f"Failed to write to InfluxDB: {e}")
